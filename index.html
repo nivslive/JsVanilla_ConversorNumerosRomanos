@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversor de Números Romanos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            text-align: center;
+        }
+        .input-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        input[type="number"],
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 150px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .result {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conversor de Números Romanos</h1>
+    <div class="input-container">
+        <input type="number" id="numberInput" min="1" max="3999" placeholder="Número (1-3999)" />
+        <button id="toRomanButton">Converter para Romano</button>
+    </div>
+    <div class="input-container">
+        <input type="text" id="romanInput" placeholder="Número Romano" />
+        <button id="toIntegerButton">Converter para Inteiro</button>
+    </div>
+    <div class="result" id="result"></div>
+
+    <script>
+        function toRoman(num) {
+            const romanNumerals = [
+                { value: 1000, numeral: "M" },
+                { value: 900, numeral: "CM" },
+                { value: 500, numeral: "D" },
+                { value: 400, numeral: "CD" },
+                { value: 100, numeral: "C" },
+                { value: 90, numeral: "XC" },
+                { value: 50, numeral: "L" },
+                { value: 40, numeral: "XL" },
+                { value: 10, numeral: "X" },
+                { value: 9, numeral: "IX" },
+                { value: 5, numeral: "V" },
+                { value: 4, numeral: "IV" },
+                { value: 1, numeral: "I" }
+            ];
+
+            let result = '';
+            for (const { value, numeral } of romanNumerals) {
+                while (num >= value) {
+                    result += numeral;
+                    num -= value;
+                }
+            }
+            return result;
+        }
+
+        function fromRoman(roman) {
+            const romanNumerals = {
+                "M": 1000,
+                "CM": 900,
+                "D": 500,
+                "CD": 400,
+                "C": 100,
+                "XC": 90,
+                "L": 50,
+                "XL": 40,
+                "X": 10,
+                "IX": 9,
+                "V": 5,
+                "IV": 4,
+                "I": 1
+            };
+
+            let result = 0;
+            for (let i = 0; i < roman.length; i++) {
+                const currentVal = romanNumerals[roman[i]];
+                const nextVal = romanNumerals[roman[i + 1]];
+                if (nextVal && currentVal < nextVal) {
+                    result -= currentVal;
+                } else {
+                    result += currentVal;
+                }
+            }
+            return result;
+        }
+
+        document.getElementById('toRomanButton').addEventListener('click', () => {
+            const number = parseInt(document.getElementById('numberInput').value);
+            if (!isNaN(number) && number > 0 && number <= 3999) {
+                const roman = toRoman(number);
+                document.getElementById('result').innerText = `Romano: ${roman}`;
+            } else {
+                document.getElementById('result').innerText = 'Por favor, insira um número válido (1-3999).';
+            }
+        });
+
+        document.getElementById('toIntegerButton').addEventListener('click', () => {
+            const roman = document.getElementById('romanInput').value.toUpperCase();
+            const integer = fromRoman(roman);
+            document.getElementById('result').innerText = `Inteiro: ${integer}`;
+        });
+    </script>
+</body>
+</html>
